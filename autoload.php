@@ -1,5 +1,6 @@
 <?php
 function autoload ($className) {
+      require_once './vendor/autoload.php';
       $ds = DIRECTORY_SEPARATOR;
       
       $directories = [

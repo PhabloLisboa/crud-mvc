@@ -1,0 +1,13 @@
+{
+    "name": "phablo/crud-php",
+    "authors": [
+        {
+            "name": "Phablo Lisboa",
+            "email": "phablolisboa01@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "^3.0",
+        "doctrine/orm": "^2.7"
+    }
+}
