@@ -1,13 +1,18 @@
 {
-    "name": "phablo/crud-php",
-    "authors": [
-        {
-            "name": "Phablo Lisboa",
-            "email": "phablolisboa01@gmail.com"
-        }
-    ],
-    "require": {
-        "twig/twig": "^3.0",
-        "doctrine/orm": "^2.7"
+  "name": "phablo/crud-php",
+  "authors": [
+    {
+      "name": "Phablo Lisboa",
+      "email": "phablolisboa01@gmail.com"
     }
+  ],
+  "require": {
+    "twig/twig": "^3.0",
+    "illuminate/database": "^8.9"
+  },
+  "autoload": {
+    "classmap": [
+      "App/Models"
+    ]
+  }
 }

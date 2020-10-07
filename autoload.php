@@ -1,11 +1,13 @@
 <?php
 function autoload ($className) {
       require_once './vendor/autoload.php';
+      require_once './bootstrap.php';
+
       $ds = DIRECTORY_SEPARATOR;
       
       $directories = [
-            "models" => "Models",
-            "controllers" => "Controllers",
+            "models" => "App${ds}Models",
+            "controllers" => "App${ds}Controllers",
             "database" => "Database",
             "config"=> "Config",
             "routes" => "Routes"
@@ -14,10 +16,9 @@ function autoload ($className) {
             $fld = __DIR__.$ds.$folder;
             
             foreach (scandir($fld) as $class) {
-                  if(preg_match('/.php$/',$class))
+                  if(preg_match('/.php$/',$class) && $class !== 'bootDatabase')
                         require_once $fld.$ds.$class;
-
-            }
+           }
     
       }
     }

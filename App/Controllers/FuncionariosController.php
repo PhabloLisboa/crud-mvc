@@ -1,6 +1,6 @@
 <?php
 
-namespace Controllers;
+namespace App\Controllers;
 
 class FuncionariosController extends Controller implements BaseActionsInterface{
 

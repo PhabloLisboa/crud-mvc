@@ -73,7 +73,7 @@ public static function run($basepath = '/'){
         }
 
         $controller =  explode('@', $route['function']);
-        $controller[0] = "Controllers\\".$controller[0];
+        $controller[0] = "App\Controllers\\".$controller[0];
 
         $currentController = new $controller[0];
         $action = $controller[1];
