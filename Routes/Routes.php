@@ -7,6 +7,7 @@ class Routes{
   public static function initRoutes(){
     
     Router::add('/', 'FuncionariosController@index');
+    Router::add('/funcionarios', 'FuncionariosController@store', 'post');
     // Router::add('/asdasd',Controllers\TesteController::teste());
     // Router::add('/contact-form',function(){
     //   echo '<form method="post"><input type="text" name="test" /><input type="submit" value="send" /></form>';

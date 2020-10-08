@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block head %}
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" href="App/assets/style.css">
+    <title>{% block title %}{% endblock %} - Phablo Lisbôa</title>
+    {% endblock %}
+  </head>
+  <body>
+
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo center">
+          <img
+          class="logo logo-img"
+          src="https://icons-for-free.com/iconfiles/png/512/lord+of+the+rings+old+man+wizard+icon-1320166692548419860.png"
+          alt=""/>
+        </a>
+        {# <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="sass.html">Sass</a></li>
+          <li><a href="badges.html">Components</a></li>
+          <li><a href="collapsible.html">JavaScript</a></li>
+        </ul> #}
+      </div>
+    </nav>
+          
+    <div id="content" class="container">{% block content %}{% endblock %}</div>
+
+    <div id="footer">
+      {% block footer %}
+      <footer class="page-footer">
+        <div class="container">
+          <div class="row center-align">
+            Desenvolvido por 
+            <a href="https://github.com/PhabloLisboa" 
+            class="footer-link" 
+            target="_blank"> 
+             Phablo Lisbôa
+            </a>
+          </div>
+        </div>
+      </footer>
+      {% endblock %}
+    </div>
+  </body>
+  <script src="App/assets/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</html>
