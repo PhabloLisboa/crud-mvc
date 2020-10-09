@@ -22,7 +22,7 @@ class Arquivo extends Eloquent
       return $arquivo;
 
     } catch (\Throwable $th) {
-      var_dump("Deu merda"); die;
+      throw new \Exception("Erro ao inserir imagem!");
     }
   }
 
@@ -43,7 +43,7 @@ class Arquivo extends Eloquent
       return $old;
       
     } catch (\Throwable $th) {
-      var_dump("Deu merda"); die;
+        throw new \Exception("Erro ao atualizar imagem!");
     }
   }
 

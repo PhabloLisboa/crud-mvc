@@ -5,7 +5,6 @@ include 'utils/utils.php';
 
 use App\Models\Arquivo;
 use App\Models\Funcionario;
-use App\Models\Telefone;
 
 class FuncionariosController extends Controller implements BaseActionsInterface{
 
@@ -22,52 +21,42 @@ class FuncionariosController extends Controller implements BaseActionsInterface{
     extract($_POST);
     extract($_FILES);
 
-
-    $funcionario = new Funcionario([
-      "name" => $name,
-      "cpf" => $cpf,
-      "email" => $email,
-      "cargo" => $cargo,
-    ]);
-    $funcionario->image_id = Arquivo::create($image)->id;
-    $funcionario->save();
-
-    foreach ($telefones as $num) {
-      Telefone::create(['funcionario_id' => $funcionario->id, 'num_telefone' => $num]);
-    }
-
-    redirect("", ['type' => "success", "message" => "Inserido com sucesso!"]);
+    try {
+      $funcionario = Funcionario::create([
+        "name" => $name,
+        "cpf" => $cpf,
+        "email" => $email,
+        "cargo" => $cargo,
+        "telefones" => $telefones,
+        "image" => $image
+      ]);
+    
+      $funcionario &&  redirect("", ['type' => "success", "message" => "Inserido com sucesso!"]);
+      
+    } catch (\Throwable $e) {
+      redirect("", ['type' => "error", "message" => $e->getMessage()]);
+    }  
   }
 
   public function update($id){
-      extract($_POST);
-      extract($_FILES);
+    extract($_FILES);
 
-      $funcionario = Funcionario::find($id);
-
-      if($funcionario)
-        $funcionario->update($_POST);
-
-  
-      foreach ($telefones as $i => $num) {
-        Telefone::find($i)->update(['num_telefone' => $num]);
-      }
-
-      if($image['name']){
-        Arquivo::edit($funcionario->image_id, $image);
-      }
-
-    redirect("", ['type' => "success", "message" => "Atualizado com sucesso!"]);
+    try {
+      Funcionario::edit($id, $_POST, $image);
+      redirect("", ['type' => "success", "message" => "Atualizado com sucesso!"]);
+    } catch (\Throwable $e) {
+      redirect("", ['type' => "error", "message" => $e->getMessage()]);
+    }
   }
 
   public function destroy($id){
     try {
-      Arquivo::remove(Funcionario::find($id)->imagem->id);
       Funcionario::destroy($id);
+      Arquivo::remove(Funcionario::find($id)->imagem->id);
 
       redirect("", ['type' => "success", "message" => "Removido com sucesso!"]);
 
-    } catch (\Throwable $th) {
+    } catch (\Throwable $e) {
       redirect("", ['type' => "error", "message" => "Erro ao remover!"]);
     }
   }
