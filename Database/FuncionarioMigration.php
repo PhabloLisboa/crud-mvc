@@ -16,7 +16,7 @@ class FuncionarioMigration{
       $table->integer('image_id')->nullable()->unsigned();
       $table->timestamps();
       
-      $table->foreign('image_id')->references('id')->on('arquivos')->onDelete('cascade');
+      $table->foreign('image_id')->references('id')->on('arquivos');
       
     });
   }

@@ -8,12 +8,14 @@ class Funcionario extends Eloquent
 {
 
   protected $fillable = ['name', 'email', 'cargo','cpf', 'image_id'];
+  protected $with = ['telefone', 'imagem'];
 
-  // public function todo()
+  public function telefone() {
+      return $this->hasMany(Telefone::class, 'funcionario_id');
+  }
 
-  //  {
-  //      return $this->hasMany('Todo');
-
-  //  }
+  public function imagem() {
+    return $this->hasOne(Arquivo::class, 'id','image_id', );
+  }
 
  }

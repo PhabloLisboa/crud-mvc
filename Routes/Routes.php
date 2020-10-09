@@ -8,7 +8,8 @@ class Routes{
     
     Router::add('/', 'FuncionariosController@index');
     Router::add('/funcionarios', 'FuncionariosController@store', 'post');
-    // Router::add('/asdasd',Controllers\TesteController::teste());
+    Router::add('/funcionarios/([0-9]*)','FuncionariosController@destroy', 'delete');
+    Router::add('/funcionarios/([0-9]*)','FuncionariosController@update', 'put');
     // Router::add('/contact-form',function(){
     //   echo '<form method="post"><input type="text" name="test" /><input type="submit" value="send" /></form>';
     // },'get');

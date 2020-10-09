@@ -35,7 +35,11 @@ public static function run($basepath = '/'){
   }
 
   // Get current request method
-  $method = $_SERVER['REQUEST_METHOD'];
+  if(isset($_POST['_method'])){
+    $method = $_POST['_method'];
+  }else{
+    $method = $_SERVER['REQUEST_METHOD'];
+  }
 
   $path_match_found = false;
 

@@ -14,6 +14,92 @@
       
     </div>
 
+    {############# Modal CREATE ##############}
+    <div id="modal-create" class="modal">
+      <div class="row right-align" style="padding-top: .5rem; background-color: #E2686D">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">
+          <i class="material-icons left" style="color: #fff;">close</i>
+        </a>                  
+      </div>
+      
+      <div class="modal-content center-align flex flex-col">
+        <h4>Novo Funcionário</h4>
+        <div class="row">
+          <form class="col s12" method="POST" enctype="multipart/form-data" action="/funcionarios">
+
+            <div class="row">
+              <div class="input-field col s6">
+                <input id="name-create" required name="name" type="text" class="validate">
+                <label for="name-create">Nome</label>
+              </div>
+              <div class="input-field col s6">
+                <input id="cpf-create" required name="cpf" type="text" class="validate">
+                <label for="cpf-create">CPF</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="email-create" required type="email" name="email" class="validate">
+                <label for="email-create">E-mail</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="cargo-create" required type="text" name="cargo">
+                <label for="cargo-create">Cargo</label>
+              </div>
+            </div>
+
+            <div class="row telefone-row">
+              <div class="input-field col s12">
+                <input id="telefone-create-1" required type="text" name="telefones[]"/>
+                <label for="telefone-create-1" >Telefone #1</label>
+              </div>
+              <div class="input-field col s12">
+                <input id="telefone-create-2" required type="text" name="telefones[]"/>
+                <label for="telefone-create-2" >Telefone #2</label>
+              </div>
+            </div>
+           
+            <div class="row flex justify-center">
+              {# <input id="lengthTelefones" value=1  hidden type="number"> #}
+              <div class="flex flex-col align-center" style="margin-right: 1rem;">
+                <button id="btnAddTelefone" type="button" class="btn-floating waves-effect waves-tea tea"><i class="material-icons">add</i></button>
+                <small>Adicionar Telefone</small>
+              </div>
+
+              <div class="flex flex-col align-center btnRemoveTelefone" style="margin-left: 1rem;">
+                <button id="btnRemoveTelefone" type="button" class="btn-floating waves-effect waves-red red"><i class="material-icons">remove</i></button>
+                <small>Remover Telefone</small>
+              </div>                     
+
+            </div>
+
+            <div class="file-field input-field">
+              <div class="btn">
+                <span>Img. Profile</span>
+                <input type="file" name="image" accept="image/*" required>
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class=" col s12">
+                <button type="submit" class="waves-effect waves-light btn">Enviar</button>
+              </div>
+            </div>
+
+          </form>
+        </div>             
+      </div>
+    </div>              
+    
+    {###########################}
+
     {% if funcionarios|length > 0 %}
 
       <table class="centered">
@@ -32,7 +118,7 @@
             <tr>
               <td>
                 <img style="height: 64px; width: 64px; object-fit: cover"
-                src="https://observatoriodocinema.elav.tmp.br/wp-content/uploads/2018/07/star_trek_tv_spock_3_copy_-_h_2018.jpg" alt="" class="circle responsive-img">
+                src={{"/#{funcionario.imagem.path}"}} alt="" class="circle responsive-img">
               </td>
               <td>{{ funcionario.name }}</td>
               <td>{{ funcionario.email }}</td>
@@ -58,7 +144,7 @@
               <div class="modal-content center-align flex">
                 <div class="center-align">
                   <img style="height: 128px; width: 128px; object-fit: cover"
-                  src="https://observatoriodocinema.elav.tmp.br/wp-content/uploads/2018/07/star_trek_tv_spock_3_copy_-_h_2018.jpg" alt="" class="circle responsive-img">
+                  src={{"/#{funcionario.imagem.path}"}} alt="" class="circle responsive-img">
                   <h4>{{ funcionario.name }}</h4>
                   <p>{{ funcionario.cargo }}</p>
                   <p>{{funcionario.email }}</p>
@@ -69,10 +155,9 @@
                 <div class="grey lighten-4 center-align flex justify-around" style="width: 80%; margin-left: 10%; padding:1rem; ">
                      <div class="flex flex-col justify-center">
                        <b>Contatos:</b>
-                       <p>(61) 78912-1231</p>
-                       <p>(61) 78912-1231</p>
-                       <p>(61) 78912-1231</p>
-                       <p>(61) 78912-1231</p>
+                       {% for telefone in funcionario.telefone  %}
+                            <p>{{telefone.num_telefone}}</p>
+                       {% endfor %}
                       </div>
                 </div>                
               </div>
@@ -90,8 +175,8 @@
                 <div class="modal-content center-align flex flex-col">
                   <h4>Editar Funcionário</h4>
                   <div class="row">
-                    <form class="col s12">
-
+                    <form class="col s12" action={{"/funcionarios/#{funcionario.id}"}}  enctype="multipart/form-data" method="POST">
+                      <input type="hidden" name="_method" value="put" />
                       <div class="row">
                         <div class="input-field col s6">
                           <input id="name-edit" name="name" type="text" value={{funcionario.name}} class="validate">
@@ -117,10 +202,20 @@
                         </div>
                       </div>
 
+                      <div class="row">
+                        {% for key,telefone in funcionario.telefone  %}
+                          <div class="input-field col s12">
+                            <input id={{"tele-edit-#{key+1}"}} required type="text" value={{telefone.num_telefone}} name={{"telefones[#{telefone.id}]"}} class="validate">
+                            <label for={{"tele-edit-#{key+1}"}}>Telefone #{{key+1}}</label>
+                          </div>
+                       {% endfor %}                        
+                      </div>
+
+
                       <div class="file-field input-field">
                         <div class="btn">
                           <span>Img. Profile</span>
-                          <input type="file">
+                          <input type="file" name="image" accept="image/*" required>
                         </div>
                         <div class="file-path-wrapper">
                           <input class="file-path validate" type="text">
@@ -154,75 +249,15 @@
                   <small>Esse ato não pode ser desfeito!</small>
                     <div class="row flex" style="margin-top: 3rem; justify-content: flex-end">
                       <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-                      <form>
+                      <form action={{"/funcionarios/#{funcionario.id}"}} method="POST">
+                        <input type="hidden" name="_method" value="delete" />
                         <button type="submit" class="modal-close waves-effect waves-green btn red">Excluir</button>
                       </form>
                     </div>
                 </div>
               </div>              
               
-              {###########################}
-
-              {############# Modal CREATE ##############}
-              <div id="modal-create" class="modal">
-                <div class="row right-align" style="padding-top: .5rem; background-color: #E2686D">
-                  <a href="#!" class="modal-close waves-effect waves-green btn-flat">
-                    <i class="material-icons left" style="color: #fff;">close</i>
-                  </a>                  
-                </div>
-                
-                <div class="modal-content center-align flex flex-col">
-                  <h4>Novo Funcionário</h4>
-                  <div class="row">
-                    <form class="col s12" method="POST" enctype="multipart/form-data" action="/funcionarios">
-
-                      <div class="row">
-                        <div class="input-field col s6">
-                          <input id="name-create" required name="name" type="text" class="validate">
-                          <label for="name-create">Nome</label>
-                        </div>
-                        <div class="input-field col s6">
-                          <input id="cpf-create" required name="cpf" type="text" class="validate">
-                          <label for="cpf-create">CPF</label>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <input id="email-create" required type="email" name="email" class="validate">
-                          <label for="email-create">E-mail</label>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <input id="cargo-create" required type="text" name="cargo">
-                          <label for="cargo-create">Cargo</label>
-                        </div>
-                      </div>
-
-                      <div class="file-field input-field">
-                        <div class="btn">
-                          <span>Img. Profile</span>
-                          <input type="file" name="image" required>
-                        </div>
-                        <div class="file-path-wrapper">
-                          <input class="file-path validate" type="text">
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class=" col s12">
-                          <button type="submit" class="waves-effect waves-light btn">Enviar</button>
-                        </div>
-                      </div>
-
-                    </form>
-                  </div>             
-                </div>
-              </div>              
-              
-              {###########################}
+              {###########################}           
               
           {% endfor %}
           
