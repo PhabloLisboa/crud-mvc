@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+include 'utils/utils.php';
 
 use App\Models\Arquivo;
 use App\Models\Funcionario;
@@ -10,9 +11,11 @@ class FuncionariosController extends Controller implements BaseActionsInterface{
 
   public function index(){
     $funcionarios =  Funcionario::all();
-    // var_dump($funcionarios[0]->imagem->path); die;
-    
-    return $this->view('ListFuncionarios', ["funcionarios" => $funcionarios]);
+
+    $feedback = $_SESSION['feedback'];
+    $_SESSION['feedback'] = null;
+
+    return $this->view('ListFuncionarios', ["funcionarios" => $funcionarios, "feedback" => $feedback]);
   }
   
   public function store(){
@@ -33,16 +36,12 @@ class FuncionariosController extends Controller implements BaseActionsInterface{
       Telefone::create(['funcionario_id' => $funcionario->id, 'num_telefone' => $num]);
     }
 
-
-
-    header("Location: http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']);
-
+    redirect("", ['type' => "success", "message" => "Inserido com sucesso!"]);
   }
 
   public function update($id){
       extract($_POST);
       extract($_FILES);
-
 
       $funcionario = Funcionario::find($id);
 
@@ -54,20 +53,23 @@ class FuncionariosController extends Controller implements BaseActionsInterface{
         Telefone::find($i)->update(['num_telefone' => $num]);
       }
 
-      if(isset($image)){
+      if($image['name']){
         Arquivo::edit($funcionario->image_id, $image);
       }
 
-    header("Location: http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']);
-
+    redirect("", ['type' => "success", "message" => "Atualizado com sucesso!"]);
   }
 
   public function destroy($id){
-    Arquivo::remove(Funcionario::find($id)->imagem->id);
-    Funcionario::destroy($id);
+    try {
+      Arquivo::remove(Funcionario::find($id)->imagem->id);
+      Funcionario::destroy($id);
 
-    header("Location: http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']);
+      redirect("", ['type' => "success", "message" => "Removido com sucesso!"]);
 
+    } catch (\Throwable $th) {
+      redirect("", ['type' => "error", "message" => "Erro ao remover!"]);
+    }
   }
 
 }

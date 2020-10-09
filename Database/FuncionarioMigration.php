@@ -10,9 +10,9 @@ class FuncionarioMigration{
 
       $table->increments('id');
       $table->string('name');
-      $table->string('email');
+      $table->string('email')->unique();
       $table->string('cargo');
-      $table->string('cpf');
+      $table->string('cpf')->unique();
       $table->integer('image_id')->nullable()->unsigned();
       $table->timestamps();
       

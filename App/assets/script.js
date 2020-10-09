@@ -13,32 +13,44 @@ document.addEventListener("DOMContentLoaded", function () {
   var instances = M.FormSelect.init(elems, {});
 });
 
-let telefones = [];
-let telefoneRow = document.querySelector(".telefone-row");
-let btnAddTelefone = document.querySelector("#btnAddTelefone");
-let btnRemoveTelefone = document.querySelector(".btnRemoveTelefone");
-let lengthTelefones = document.querySelector("#lengthTelefones");
-
-btnRemoveTelefone.style.display = "none";
-
-btnAddTelefone.addEventListener(
-  "click",
-  () => (lengthTelefones.value = `${lengthTelefones.value + 1}`)
+let telefoneRowCreate = document.querySelector(".telefone-row-create");
+let btnAddTelefoneCreate = document.querySelector("#btnAddTelefoneCreate");
+let btnRemoveTelefoneCreate = document.querySelector(
+  "#btnRemoveTelefoneCreate"
 );
+let lengthTelefonesCreate = document.querySelector("#lengthTelefonesCreate");
 
-btnRemoveTelefone.addEventListener("click", () =>
-  console.log((lengthTelefones.value = lengthTelefones.value - 1))
-);
-
-lengthTelefones.addEventListener("change", (e) => {
-  console.log("alo");
-  for (let i = 0; i <= e.value; i++) {
-    telefoneRow.innerHTML += `<div class="input-field col s12">
-      <input id="telefone-create-${
-        i + 1
-      }" required type="text" name="telefones[]"/>
-      <label for="telefone-create-${i + 1}" >Telefone #${i + 1}</label>
-    </div>
-    <br>`;
-  }
+btnAddTelefoneCreate.addEventListener("click", () => {
+  lengthTelefonesCreate.setAttribute(
+    "value",
+    parseInt(lengthTelefonesCreate.value) + 1
+  );
+  renderTelefone(telefoneRowCreate, lengthTelefonesCreate.value);
 });
+
+btnRemoveTelefoneCreate.addEventListener("click", () => {
+  if (parseInt(lengthTelefonesCreate.value) > 1)
+    lengthTelefonesCreate.setAttribute(
+      "value",
+      parseInt(lengthTelefonesCreate.value) - 1
+    );
+  renderTelefone(telefoneRowCreate, lengthTelefonesCreate.value);
+});
+
+let renderTelefone = (item, length) => {
+  item.innerHTML = "";
+  for (let i = 0; i < length; i++) {
+    item.innerHTML += `<div class="input-field col s12">
+    <input id="telefone-create-${
+      i + 1
+    }" required type="text" name="telefones[]" class="phone"/>
+    <label for="telefone-create-${i + 1}" >Telefone #${i + 1}</label>
+    </div>
+    <br/>`;
+  }
+  $(".phone").mask("(00) 0000-0000");
+};
+
+renderTelefone(telefoneRowCreate, lengthTelefonesCreate.value);
+
+$(".cpf").mask("000.000.000-00", { reverse: true });
